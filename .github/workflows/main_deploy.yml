@@ -1,0 +1,31 @@
+name: Deploy to Salesforce
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Install Salesforce CLI
+      run: npm install sfdx-cli --global
+
+    - name: Authenticate to Salesforce
+      env:
+        SF_USERNAME: ${{ github.event.ref == 'refs/heads/main' && secrets.SF_USERNAME_PROD || secrets.SF_USERNAME_DEV }}
+        SF_PASSWORD: ${{ github.event.ref == 'refs/heads/main' && secrets.SF_PASSWORD_PROD || secrets.SF_PASSWORD_DEV }}
+        SF_LOGIN_URL: ${{ github.event.ref == 'refs/heads/main' && secrets.SF_LOGIN_URL_PROD || secrets.SF_LOGIN_URL_DEV }}
+      run: |
+        echo "Authenticating..."
+        sfdx auth:login --username $SF_USERNAME --password $SF_PASSWORD --instanceurl $SF_LOGIN_URL --setdefaultusername
+
+    - name: Deploy metadata to Salesforce
+      run: |
+        sfdx force:source:deploy -p force-app/main/default -w 10
