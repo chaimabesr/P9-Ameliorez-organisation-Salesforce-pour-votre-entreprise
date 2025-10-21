@@ -31,4 +31,4 @@ jobs:
         SF_USERNAME: ${{ secrets.SF_USERNAME }}
       run: |
         echo "Deploying source to Salesforce..."
-        sfdx force:source:deploy -p force-app/main/default -u $SF_USERNAME --wait 10
+        sfdx force:source:deploy -p force-app/main/default --targetusername $SF_USERNAME --wait 10
