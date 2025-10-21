@@ -24,11 +24,6 @@ jobs:
         SF_LOGIN_URL: ${{ secrets.SF_LOGIN_URL }}
       run: |
         echo "Authenticating to Salesforce..."
-        sfdx force:auth:password:grant --username $SF_USERNAME --password $SF_PASSWORD --instanceurl $SF_LOGIN_URL --setdefaultusername
-
-    - name: Deploy source to Salesforce
-      env:
-        SF_USERNAME: ${{ secrets.SF_USERNAME }}
-      run: |
+        sfdx force:auth:password:grant --username $SF_USERNAME --password $SF_PASSWORD --instanceurl $SF_LOGIN_URL --setdefaultusername|
         echo "Deploying source to Salesforce..."
         sfdx force:source:deploy -p force-app/main/default --targetusername $SF_USERNAME --wait 10
