@@ -3,8 +3,8 @@ name: Deploy to Salesforce
 on:
   push:
     branches:
-      - dev
       - main
+      - dev
 
 jobs:
   deploy:
@@ -17,13 +17,19 @@ jobs:
     - name: Install Salesforce CLI
       run: npm install sfdx-cli --global
 
-    - name: Authenticate to Salesforce
+    - name: Authenticate to Salesforce via JWT
+      env:
+        SF_CONSUMER_KEY: ${{ secrets.SF_CONSUMER_KEY }}
+        SF_USERNAME: ${{ secrets.SF_USERNAME }}
+        SF_INSTANCE_URL: https://empathetic-narwhal-6keh3r-dev-ed.trailblaze.my.salesforce.com/   # ou ton URL personnalisée si sandbox/dev
+        SF_JWT_KEY: ${{ secrets.SF_JWT_KEY }}
+      run: |
+        echo "$SF_JWT_KEY" > server.key
+        sfdx force:auth:jwt:grant --clientid $SF_CONSUMER_KEY --jwtkeyfile server.key --username $SF_USERNAME --instanceurl $SF_INSTANCE_URL --setdefaultusername
+
+    - name: Deploy source to Salesforce
       env:
         SF_USERNAME: ${{ secrets.SF_USERNAME }}
-        SF_PASSWORD: ${{ secrets.SF_PASSWORD }}
-        SF_LOGIN_URL: ${{ secrets.SF_LOGIN_URL }}
       run: |
-        echo "Authenticating to Salesforce..."
-        sfdx force:auth:password:grant --username $SF_USERNAME --password $SF_PASSWORD --instanceurl $SF_LOGIN_URL --setdefaultusername|
-        echo "Deploying source to Salesforce..."
         sfdx force:source:deploy -p force-app/main/default --targetusername $SF_USERNAME --wait 10
+
