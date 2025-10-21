@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev
-      - main
+    
 
 jobs:
   deploy:
@@ -19,13 +19,13 @@ jobs:
 
     - name: Authenticate to Salesforce
       env:
-        SF_USERNAME: ${{ github.event.ref == 'refs/heads/main' && secrets.SF_USERNAME_PROD || secrets.SF_USERNAME_DEV }}
-        SF_PASSWORD: ${{ github.event.ref == 'refs/heads/main' && secrets.SF_PASSWORD_PROD || secrets.SF_PASSWORD_DEV }}
-        SF_LOGIN_URL: ${{ github.event.ref == 'refs/heads/main' && secrets.SF_LOGIN_URL_PROD || secrets.SF_LOGIN_URL_DEV }}
+        SF_USERNAME: ${{ secrets.SF_USERNAME }}
+        SF_PASSWORD: ${{ secrets.SF_PASSWORD }}
+        SF_LOGIN_URL: ${{ secrets.SF_LOGIN_URL }}
       run: |
         echo "Authenticating..."
         sfdx auth:login --username $SF_USERNAME --password $SF_PASSWORD --instanceurl $SF_LOGIN_URL --setdefaultusername
 
     - name: Deploy metadata to Salesforce
       run: |
-        sfdx force:source:deploy -p force-app/main/default -w 10
+        sfdx force:source:deploy -p force-app/main/default -u $SF_USERNAME -w 10
