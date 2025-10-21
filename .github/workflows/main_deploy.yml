@@ -5,39 +5,31 @@ on:
     branches:
       - main
       - dev
-    paths:
-      - 'force-app/**'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+    - name: Checkout repo
+      uses: actions/checkout@v3
 
-      - name: Install Salesforce CLI
-        run: npm install @salesforce/cli --global
+    - name: Install Salesforce CLI
+      run: npm install sfdx-cli --global
 
-      - name: Authenticate to Salesforce via JWT
-        env:
-          SF_CONSUMER_KEY: ${{ secrets.SF_CONSUMER_KEY }}
-          SF_USERNAME: ${{ secrets.SF_USERNAME }}
-          SF_JWT_KEY: ${{ secrets.SF_JWT_KEY }}
-          SF_INSTANCE_URL: https://empathetic-narwhal-6keh3r-dev-ed.trailblaze.my.salesforce.com
-        run: |
-          echo "${SF_JWT_KEY}" | tr -d '\r' > server.key
-          sf org login jwt \
-            --username $SF_USERNAME \
-            --jwt-key-file server.key \
-            --client-id $SF_CONSUMER_KEY \
-            --instance-url $SF_INSTANCE_URL \
-            --set-default
+    - name: Authenticate to Salesforce via JWT
+      env:
+        SF_CONSUMER_KEY: ${{ secrets.SF_CONSUMER_KEY }}
+        SF_USERNAME: ${{ secrets.SF_USERNAME }}
+        SF_INSTANCE_URL: https://empathetic-narwhal-6keh3r-dev-ed.trailblaze.my.salesforce.com  
+        SF_JWT_KEY: ${{ secrets.SF_JWT_KEY }}
+      run: |
+        echo "$SF_JWT_KEY" | tr -d '\r' > server.key
+        sfdx force:auth:jwt:grant --clientid $SF_CONSUMER_KEY --jwtkeyfile server.key --username $SF_USERNAME --instanceurl $SF_INSTANCE_URL --setdefaultusername
 
-      - name: Deploy source to Salesforce (run all local tests)
-        run: |
-          sf project deploy start \
-            --source-dir force-app/main/default \
-            --test-level RunLocalTests \
-            --wait 10
+    - name: Deploy source to Salesforce
+      env:
+        SF_USERNAME: ${{ secrets.SF_USERNAME }}
+      run: |
+        sfdx force:source:deploy -p force-app/main/default --targetusername $SF_USERNAME --wait 10
 
