@@ -13,3 +13,4 @@ package.xml
 **/tsconfig.json
 
 **/*.ts
+README.md
