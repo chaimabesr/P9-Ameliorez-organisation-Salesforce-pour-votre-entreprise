@@ -31,4 +31,4 @@ jobs:
       env:
         SF_USERNAME: ${{ secrets.SF_USERNAME }}
       run: |
-        sfdx force:source:deploy -p force-app/main/default --targetusername $SF_USERNAME --wait 10 --json
+        sfdx force:source:deploy -p force-app/main/default --targetusername $SF_USERNAME --wait 10 

@@ -1,5 +1,5 @@
 import { createElement } from 'lwc';
-import Orders from 'c/orders';
+import OrdersSummary from 'c/ordersSummary;
 
 describe('c-orders', () => {
     afterEach(() => {
