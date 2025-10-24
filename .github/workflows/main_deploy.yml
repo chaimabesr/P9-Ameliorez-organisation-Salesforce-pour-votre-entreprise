@@ -31,11 +31,4 @@ jobs:
       env:
         SF_USERNAME: ${{ secrets.SF_USERNAME }}
       run: |
-        sfdx force:source:deploy \
-          -p force-app/main/default/classes,\
-           force-app/main/default/triggers,\
-           force-app/main/default/lwc,\
-          force-app/main/default/aura \
-          --targetusername $SF_USERNAME \
-         --wait 10
-
+        sfdx force:source:deploy -p force-app/main/default --targetusername $SF_USERNAME --wait 10 
