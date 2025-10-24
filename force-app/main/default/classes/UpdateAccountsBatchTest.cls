@@ -13,11 +13,13 @@ public class UpdateAccountsBatchTest {
        
         Order ord = new Order(
             AccountId = acc.Id,
-            Status = 'Activated',
+            Status = 'Draft',
+            EffectiveDate=Date.today(),
             Name = 'Commande Test'
         );
         insert ord;
-
+        ord.Status = 'Activated';
+        update ord;
         Test.startTest();
         UpdateAccountsBatch batch = new UpdateAccountsBatch();
         Database.executeBatch(batch, 200);
