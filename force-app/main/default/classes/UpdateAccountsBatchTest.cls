@@ -1,9 +1,10 @@
-@isTest
+@isTest(SeeAllData=true)
 public class UpdateAccountsBatchTest {
 
 
     @isTest
     static void testBatchUpdatesAccounts() {
+         
        
         Account acc = new Account(
         Name = 'Compte Test',

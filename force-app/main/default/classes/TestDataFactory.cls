@@ -58,19 +58,19 @@ public with sharing class TestDataFactory {
     return oi;
 }
     Pricebook2 pb;
-    public static Id getStandardPricebookId() {
-    //  On récupère le Pricebook standard
+    
+public static Id getStandardPricebookId() {
+    // Récupère le Pricebook standard
     Pricebook2 pb = [SELECT Id, IsActive FROM Pricebook2 WHERE IsStandard = true LIMIT 1];
     
-    //  On vérifie qu’il est bien actif
+    // Active-le si nécessaire
     if (!pb.IsActive) {
         pb.IsActive = true;
         update pb;
     }
     
-    //  On retourne son Id
+    // Retourne l'Id
     return pb.Id;
 }
-
     
 }
