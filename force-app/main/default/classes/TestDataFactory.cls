@@ -1,7 +1,9 @@
 public with sharing class TestDataFactory {
     public static Account createAccount(String name){
         Account acc = new Account(
-            Name = name
+            Name = name,
+            Chiffre_d_affaire__c = 0 // Initialisation à zéro
+
             
         );
         insert acc;
