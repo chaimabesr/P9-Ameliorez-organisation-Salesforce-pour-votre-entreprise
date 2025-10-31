@@ -28,7 +28,6 @@ public static void updateAccount (List<Id> orderIds){
             }
         }
 
-
        acc.Chiffre_d_affaire__c = sumTotalAmount;
         accUpdated.add(acc);
     }
