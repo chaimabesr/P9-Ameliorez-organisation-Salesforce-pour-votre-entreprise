@@ -1,4 +1,4 @@
-global class UpdateAccountsBatch implements Database.Batchable<sObject>{
+global class UpdateAccountsBatch implements Database.Batchable<sObject>,Schedulable{
     
     global Database.QueryLocator start(Database.BatchableContext info){ 
         //Requeter seulement les comptes qui ont au moins une commande avec le Status 'Activated'
@@ -23,4 +23,8 @@ global class UpdateAccountsBatch implements Database.Batchable<sObject>{
     global void finish(Database.BatchableContext info){     
         
     } 
+    global void execute(SchedulableContext sc) {
+       UpdateAccountsBatch   batch = new UpdateAccountsBatch ();
+        Database.executeBatch(batch, 200);
+    }
  }
