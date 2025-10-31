@@ -24,7 +24,7 @@ jobs:
         SF_INSTANCE_URL: https://empathetic-narwhal-6keh3r-dev-ed.trailblaze.my.salesforce.com  
         SF_JWT_KEY: ${{ secrets.SF_JWT_KEY }}
       run: |
-        echo "$SF_JWT_KEY" | tr -d '\r' > server.key
+        printf "%s" "$SF_JWT_KEY" > server.key
         sfdx force:auth:jwt:grant --clientid $SF_CONSUMER_KEY --jwtkeyfile server.key --username $SF_USERNAME --instanceurl $SF_INSTANCE_URL --setdefaultusername
 
     - name: Deploy source to Salesforce
